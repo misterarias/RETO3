@@ -12,29 +12,34 @@ services:
         volumes_from:
             - stats_data
 
-    server:
-        build: ./server_node
-        ports:
-            - 8888:80
+    consumer:
+        build: ./node_kafka_consumer
         links:
-            - db:reto1db
             - zookeeper:zk
-        expose:
-            - 80
+            - kafka:kafka
         volumes_from:
             - stats_data
+        expose:
+            - 80
+
+    consumer-lb:
+        image: dockercloud/haproxy
+        links:
+            - consumer
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        ports:
+            - 8888:80
 
     tsung:
         build: ./load
         links:
-            - server:reto1server
+            - consumer-lb:reto1server
         expose:
             - 80
-        ports:
-            - 10080:80
         environment:
-            RATE: 10
-            HITS: 10
+            RATE: 50
+            HITS: 50
 
     logstash:
         build: ./logstash
@@ -83,7 +88,7 @@ services:
             HOSTNAME_COMMAND: "ifconfig  eth0 | egrep -o 'inet addr:[0-9.]*' | cut -d: -f2 | tr -d ' '"
             KAFKA_ADVERTISED_PORT: 9092
             KAFKA_AUTO_CREATE_TOPIC_ENABLE: 'true'
-            KAFKA_ZOOKEEPER_CONNECT: zk:2181
+            KAFKA_ZOOKEEPER_CONNECT: "zk:2181"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
 
@@ -97,3 +102,25 @@ services:
         image: busybox
         volumes:
             - ./shared:/shared
+
+    # Flink
+    jobmanager:
+        image: flink
+        ports:
+            - "48080:8080"
+            - "48081:8081"
+            - "220:22"
+        expose:
+            - "6123"
+            - "22"
+        command: /usr/local/flink/bin/config-flink.sh jobmanager
+
+    taskmanager:
+        image: flink
+        ports:
+            - "22"
+        expose:
+            - "6121"
+            - "6122"
+        links:
+            - jobmanager:jobmanager

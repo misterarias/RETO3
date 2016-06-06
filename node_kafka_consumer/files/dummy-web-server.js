@@ -3,7 +3,6 @@
 var cluster     = require('cluster');
 var http        = require('http');
 var os          = require('os');
-var mysql       = require('mysql');
 var querystring = require('querystring');
 var kafka = require('kafka-node'),
     HighLevelProducer = kafka.HighLevelProducer,
@@ -16,8 +15,8 @@ producer.on('ready', function () {
 });
 
 producer.on('error', function (err) {
-  console.log("ERR", err)
-    console.dir(err);
+  console.log("ERR", err);
+  console.dir(err);
 }).on('uncaughtException', function (err) {
   console.log('uncaughtException', err);
 });
@@ -37,15 +36,16 @@ function process(producer, req, res) {
 
   req.on('end', function() {
     var params = querystring.parse(body);
-    if (!params.value) {
-      res.writeHead(200);
-      res.end();
-      return;
+    if (params.value) {
+      var msg = [{ topic: 'topic1', messages: params.value }];
+      producer.send(msg, function (err, data) {
+        console.log("sent value: " + params.value, err || data);
+      });
     }
-    var msg = [{ topic: 'topic1', messages: params.value, partition: 0}];
-    producer.send(msg, function (err, data) {
-      console.log("send", err || data);
-    });
+
+    res.writeHead(200);
+    res.end();
+    return;
   });
 }
 
