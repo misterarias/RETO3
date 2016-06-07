@@ -40,4 +40,7 @@ RUN chmod +x /usr/local/flink/bin/config-flink.sh
 EXPOSE 6123
 EXPOSE 22
 
+# Copy the jar manually
+ADD reto3-0.1.jar /tmp/thejar.jar
+
 CMD ["/usr/local/flink/bin/config-flink.sh", "taskmanager"]

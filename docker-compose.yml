@@ -1,17 +1,6 @@
 ---
 version: '2'
 services:
-    db:
-        build: ./DB
-        ports:
-            - 3306:3306
-        expose:
-            - 3306
-        environment:
-            MYSQL_ROOT_PASSWORD: passwd
-        volumes_from:
-            - stats_data
-
     consumer:
         build: ./node_kafka_consumer
         links:
@@ -124,3 +113,5 @@ services:
             - "6122"
         links:
             - jobmanager:jobmanager
+            - kafka
+            - zookeeper:zk

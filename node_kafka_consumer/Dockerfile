@@ -1,16 +1,12 @@
-FROM alpine:latest
-MAINTAINER Inigo Crespo Bluetab
+#FROM alpine:3.3
+FROM  mhart/alpine-node:latest
 
-RUN apk add --update nodejs && \
-    npm install kafka-node
+USER root
+WORKDIR /
+RUN apk add --no-cache make gcc g++ python
 
-RUN echo "@testing http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
-RUN apk update && apk --update add dstat@testing
+COPY files/dummy-web-server.js /src/dummy-web-server.js
+COPY files/package.json /src/package.json
+RUN cd /src ; npm install --production
 
-ADD files/dummy-web-server.js /root/dummy-web-server.js
-ADD files/start.sh /root/start.sh
-
-RUN chmod +x /root/dummy-web-server.js
-RUN chmod +x /root/start.sh
-
-ENTRYPOINT ["/root/start.sh"]
+ENTRYPOINT ["node", "/src/dummy-web-server.js"]

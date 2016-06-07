@@ -46,6 +46,7 @@ under the License.
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<flink.version>1.0.3</flink.version>
+		<scala.version>2.11</scala.version>
 	</properties>
 
 	<!-- 
@@ -75,19 +76,24 @@ under the License.
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-scala_2.10</artifactId>
+      <artifactId>flink-scala_${scala.version}</artifactId>
 			<version>${flink.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-streaming-scala_2.10</artifactId>
+      <artifactId>flink-streaming-scala_${scala.version}</artifactId>
 			<version>${flink.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-clients_2.10</artifactId>
+      <artifactId>flink-clients_${scala.version}</artifactId>
 			<version>${flink.version}</version>
-		</dependency>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka_${scala.version}</artifactId>
+      <version>0.10.0.0</version>
+    </dependency>
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-connector-kafka</artifactId>
@@ -105,28 +111,34 @@ under the License.
 			<dependencies>
 				<dependency>
 					<groupId>org.apache.flink</groupId>
-					<artifactId>flink-scala_2.10</artifactId>
+          <artifactId>flink-scala_${scala.version}</artifactId>
 					<version>${flink.version}</version>
 					<scope>provided</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.flink</groupId>
-					<artifactId>flink-streaming-scala_2.10</artifactId>
+          <artifactId>flink-streaming-scala_${scala.version}</artifactId>
 					<version>${flink.version}</version>
 					<scope>provided</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.flink</groupId>
-					<artifactId>flink-clients_2.10</artifactId>
+          <artifactId>flink-clients_${scala.version}</artifactId>
 					<version>${flink.version}</version>
 					<scope>provided</scope>
 				</dependency>
-				<dependency>
-					<groupId>org.apache.flink</groupId>
-					<artifactId>flink-connector-kafka</artifactId>
-					<version>0.10.2</version>
+        <dependency>
+          <groupId>org.apache.kafka</groupId>
+          <artifactId>kafka_${scala.version}</artifactId>
+          <version>0.10.0.0</version>
 					<scope>compile</scope>
-				</dependency>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.flink</groupId>
+          <artifactId>flink-connector-kafka</artifactId>
+          <version>0.10.2</version>
+					<scope>compile</scope>
+        </dependency>
 			</dependencies>
 
 			<build>
@@ -186,25 +198,25 @@ under the License.
 									<exclude>org.apache.flink:flink-shaded-curator-recipes</exclude>
 									<exclude>org.apache.flink:flink-core</exclude>
 									<exclude>org.apache.flink:flink-java</exclude>
-									<exclude>org.apache.flink:flink-scala_2.10</exclude>
-									<exclude>org.apache.flink:flink-runtime_2.10</exclude>
-									<exclude>org.apache.flink:flink-optimizer_2.10</exclude>
-									<exclude>org.apache.flink:flink-clients_2.10</exclude>
-									<exclude>org.apache.flink:flink-avro_2.10</exclude>
-									<exclude>org.apache.flink:flink-examples-batch_2.10</exclude>
-									<exclude>org.apache.flink:flink-examples-streaming_2.10</exclude>
-									<exclude>org.apache.flink:flink-streaming-java_2.10</exclude>
+                  <exclude>org.apache.flink:flink-scala_${scala.version}</exclude>
+                  <exclude>org.apache.flink:flink-runtime_${scala.version}</exclude>
+                  <exclude>org.apache.flink:flink-optimizer_${scala.version}</exclude>
+                  <exclude>org.apache.flink:flink-clients_${scala.version}</exclude>
+                  <exclude>org.apache.flink:flink-avro_${scala.version}</exclude>
+                  <exclude>org.apache.flink:flink-examples-batch_${scala.version}</exclude>
+                  <exclude>org.apache.flink:flink-examples-streaming_${scala.version}</exclude>
+                  <exclude>org.apache.flink:flink-streaming-java_${scala.version}</exclude>
 
 									<!-- Also exclude very big transitive dependencies of Flink
 
 									WARNING: You have to remove these excludes if your code relies on other
 									versions of these dependencies.
 
-									-->
 
 									<exclude>org.scala-lang:scala-library</exclude>
 									<exclude>org.scala-lang:scala-compiler</exclude>
 									<exclude>org.scala-lang:scala-reflect</exclude>
+									-->
 									<exclude>com.amazonaws:aws-java-sdk</exclude>
 									<exclude>com.typesafe.akka:akka-actor_*</exclude>
 									<exclude>com.typesafe.akka:akka-remote_*</exclude>
@@ -273,7 +285,7 @@ under the License.
 							<transformers>
 								<!-- add Main-Class to manifest file -->
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>org.myorg.quickstart.Job</mainClass>
+									<mainClass>net.bluetab.retos.TsungConsumer</mainClass>
 								</transformer>
 							</transformers>
 							<createDependencyReducedPom>false</createDependencyReducedPom>
