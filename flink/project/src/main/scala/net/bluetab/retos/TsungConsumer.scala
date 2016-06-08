@@ -22,6 +22,8 @@ import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema
+import org.slf4j.LoggerFactory
+import org.slf4j.Logger
 
 /**
   *
@@ -40,6 +42,7 @@ object TsungConsumer {
     val topicname: String = parameterTool.getRequired("topic")
     val env: StreamExecutionEnvironment =
       StreamExecutionEnvironment.getExecutionEnvironment
+
 
     try {
       val consumer = new FlinkKafkaConsumer[String](

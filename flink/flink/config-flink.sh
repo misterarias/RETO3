@@ -19,8 +19,6 @@
 ################################################################################
 
 
-
-
 CONF=/usr/local/flink/conf
 EXEC=/usr/local/flink/bin
 
@@ -31,14 +29,17 @@ sed -i -e "s/%nb_slots%/`nproc`/g" $CONF/flink-conf.yaml
 #set parallelism
 sed -i -e "s/%parallelism%/1/g" $CONF/flink-conf.yaml
 
+cat /etc/hosts
+
 if [ "$1" = "jobmanager" ]; then
     echo "Configuring Job Manager on this node"
     sed -i -e "s/%jobmanager%/`hostname -i`/g" $CONF/flink-conf.yaml
     $EXEC/jobmanager.sh start cluster
-
 elif [ "$1" = "taskmanager" ]; then
     echo "Configuring Task Manager on this node"
-    sed -i -e "s/%jobmanager%/$JOBMANAGER_PORT_6123_TCP_ADDR/g" $CONF/flink-conf.yaml
+    jobmanager_ip="172.16.0.51"
+    ##sed -i -e "s/%jobmanager%/$JOBMANAGER_PORT_6123_TCP_ADDR/g" $CONF/flink-conf.yaml
+    sed -i -e "s/%jobmanager%/$jobmanager_ip/g" $CONF/flink-conf.yaml
     $EXEC/taskmanager.sh start
 fi
 

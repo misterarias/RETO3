@@ -45,8 +45,9 @@ under the License.
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<flink.version>1.0.3</flink.version>
-		<scala.version>2.11</scala.version>
+		<flink.version>1.0.2</flink.version>
+    <scala.version>2.11</scala.version>
+    <kafka.version>0.8.2.2</kafka.version>
 	</properties>
 
 	<!-- 
@@ -92,12 +93,12 @@ under the License.
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka_${scala.version}</artifactId>
-      <version>0.10.0.0</version>
+      <version>${kafka.version}</version>
     </dependency>
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-connector-kafka</artifactId>
-			<version>0.10.2</version>
+			<version>0.10.1</version>
 		</dependency>
 	</dependencies>
 
@@ -130,13 +131,13 @@ under the License.
         <dependency>
           <groupId>org.apache.kafka</groupId>
           <artifactId>kafka_${scala.version}</artifactId>
-          <version>0.10.0.0</version>
+          <version>${kafka.version}</version>
 					<scope>compile</scope>
         </dependency>
         <dependency>
           <groupId>org.apache.flink</groupId>
           <artifactId>flink-connector-kafka</artifactId>
-          <version>0.10.2</version>
+          <version>0.10.1</version>
 					<scope>compile</scope>
         </dependency>
 			</dependencies>
